@@ -6,7 +6,7 @@ const inputForm = props => {
         <View>
             <Picker
                 selectedValue={props.type}
-                onValueChange={(itemValue, itemIndex) => props.typeHandler}>
+                onValueChange={props.typeHandler}>
                 <Picker.Item label="Income" value="income" />
                 <Picker.Item label="Expense" value="expense" />
 
