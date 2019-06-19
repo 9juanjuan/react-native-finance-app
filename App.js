@@ -15,31 +15,48 @@ const data =[
 export default class App extends React.Component {
   state = {
         type: 'income',
-        amount: 0,
+        amount: '',
         category: '',
         description: ''
       }
   
   _getUserInput = () => {
-    console.log('hello')
-    // this.setState({
-    //  log: {
-
-       // }
-    // })
+    console.log(this.state.type)
+    data.push({
+      name: this.state.description,
+      amount: this.state.amount,
+      color: 'green',   
+      legendFontColor: 'green',
+      legendFontSize: 10
+    })
+    // Resets input fields
+    this.setState({
+      type: 'income',
+      amount: '',
+      category: '',
+      description: ''
+    })
   }
   _getUserText = (text) => {
     console.log(text);
     this.setState({
-        description: text
+        description: text 
     })
   }
-  _getType = (itemValue, itemIndex ) => {
-    console.log(itemValue)
+  _getUserAmount = (text) => {
+    console.log(text);
+    const amount = parseInt(text) 
     this.setState({
-        type: itemValue
+        amount
     })
-    console.log(this.state.type)
+    console.log(this.state.amount)
+  }
+
+  _getType = (itemValue, itemIndex ) => {
+    const value = itemValue 
+    this.setState({
+        type: value
+    })
   }
 
   render () {
@@ -47,7 +64,7 @@ export default class App extends React.Component {
       <View>
         <View style={styles.container}>
           <Title/>
-          <InputForm formHandler={this._getUserInput} descriptionHandler={this._getUserText} typeHandler={this._getType} description={this.state.description} type={this.state.type}/>
+          <InputForm formHandler={this._getUserInput} descriptionHandler={this._getUserText} typeHandler={this._getType} amountHandler={this._getUserAmount} description={this.state.description} type={this.state.type} amount={this.state.amount} />
         </View>
         <View style={styles.chart}>
           <PieChart
@@ -78,7 +95,8 @@ export default class App extends React.Component {
     },
     chart: {
       flex: 1,
-      marginTop: 200,
+      marginTop: 400,
+      marginLeft: 30,
       justifyContent: 'flex-start',
       alignContent: 'center',
       alignItems: 'center'
