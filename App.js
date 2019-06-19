@@ -3,13 +3,16 @@ import { StyleSheet, Text, View, Dimensions} from 'react-native';
 import Title from './components/Title';
 import InputForm from './components/InputForm'
 import { PieChart } from 'react-native-chart-kit'
+import colors from './colors.js'
+
+const colorChooser = colors
 const screenWidth = Dimensions.get('window').width
 // import console= require('console');
 const data =[ 
-  { name: 'Food', amount: 200, color: 'red', legendFontColor: 'red', legendFontSize: 10},
-  { name: 'Movies', amount: 50, color: '#ff6666', legendFontColor: 'red', legendFontSize: 10},
-  { name: 'Clothes', amount: 150, color: '#ffe6e6', legendFontColor: 'red', legendFontSize: 10},
-  { name: 'Work', amount: 1000, color: '#33cc33', legendFontColor: 'green', legendFontSize: 10}
+  // { name: 'Food', amount: 200, color: 'red', legendFontColor: 'red', legendFontSize: 10},
+  // { name: 'Movies', amount: 50, color: '#ff6666', legendFontColor: 'red', legendFontSize: 10},
+  // { name: 'Clothes', amount: 150, color: '#ffe6e6', legendFontColor: 'red', legendFontSize: 10},
+  // { name: 'Work', amount: 1000, color: '#33cc33', legendFontColor: 'green', legendFontSize: 10}
 ]
 
 export default class App extends React.Component {
@@ -17,21 +20,33 @@ export default class App extends React.Component {
         type: 'income',
         amount: '',
         category: '',
-        description: ''
+        description: '',
+        color: ''
       }
   
   _getUserInput = () => {
-    console.log(this.state.type)
-    data.push({
-      name: this.state.description,
-      amount: this.state.amount,
-      color: 'green',   
-      legendFontColor: 'green',
-      legendFontSize: 10
-    })
+    if (this.state.type === 'income') {
+      let randColor = colorChooser.greens[Math.floor(Math.random()*7)];
+      data.push({
+        name: this.state.description,
+        amount: this.state.amount,
+        color: randColor,   
+        legendFontColor: 'green',
+        legendFontSize: 10
+      });
+    } else if (this.state.type==='expense') {
+      let randColor = colorChooser.reds[Math.floor(Math.random()*7)];
+      data.push({
+        name: this.state.description,
+        amount: this.state.amount,
+        color: randColor,   
+        legendFontColor: 'green',
+        legendFontSize: 10
+      });
+    }
     // Resets input fields
     this.setState({
-      type: 'income',
+      type: '',
       amount: '',
       category: '',
       description: ''
@@ -51,7 +66,6 @@ export default class App extends React.Component {
     })
     console.log(this.state.amount)
   }
-
   _getType = (itemValue, itemIndex ) => {
     const value = itemValue 
     this.setState({
