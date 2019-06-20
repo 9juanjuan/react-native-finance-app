@@ -1,11 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, ScrollView} from 'react-native';
 import Title from './components/Title';
-import InputForm from './components/InputForm'
-import { PieChart } from 'react-native-chart-kit'
-import colors from './colors.js'
+import InputForm from './components/InputForm';
+import IncomeTable from './components/IncomeTable';
+import { PieChart } from 'react-native-chart-kit';
+import colors from './colors.js';
+const uuid = require('uuidv4');
 const colorChooser = colors
 const screenWidth = Dimensions.get('window').width
+
 // import console= require('console');
 const data =[ 
   // { name: 'Food', amount: 200, color: 'red', legendFontColor: 'red', legendFontSize: 10},
@@ -13,6 +16,8 @@ const data =[
   // { name: 'Clothes', amount: 150, color: '#ffe6e6', legendFontColor: 'red', legendFontSize: 10},
   // { name: 'Work', amount: 1000, color: '#33cc33', legendFontColor: 'green', legendFontSize: 10}
 ]
+var incomeData = [];
+var expenseData = [];
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -44,8 +49,19 @@ export default class App extends React.Component {
         color: randColor,   
         legendFontColor: 'green',
         legendFontSize: 10,
-        date: this.state.chosenDate
+        date: this.state.chosenDate,
+        type: this.state.type,
+        id: uuid()
       });
+      data.map((entry)=> {
+        console.log(entry.type)
+        if (entry.type === 'income' && entry.id in data === false
+        ) {
+          incomeData.push([entry.date, this.state.description, entry.amount])
+        }
+      })
+      console.log(incomeData);
+
     } else if (this.state.type ==='expense') {
       let randColor = colorChooser.reds[Math.floor(Math.random()*7)];
       data.push({
@@ -54,10 +70,19 @@ export default class App extends React.Component {
         color: randColor,   
         legendFontColor: 'red',
         legendFontSize: 10,
-        date: this.state.chosenDate
+        date: this.state.chosenDate,
+        type: this.state.type,
+        id: uuid()
       });
+      data.map((entry)=> {
+        if (entry.type === 'expense' ) {
+          expenseData.push([entry.date, this.state.description, entry.amount])
+        }
+      })
     }
   }
+
+  
     // Resets input fields
     this.setState({
       type: 'income',
@@ -105,21 +130,22 @@ export default class App extends React.Component {
              style={{borderWidth: 1, height: 300}}
              horizontal={true}>
            <View style={styles.chart}>
-             <Text>Percentage Breakdown</Text>
-             <PieChart
-                 data={data}
-                 width={screenWidth}
-                 height={200}
-                 chartConfig={{
-                   backgroundGradientFrom: '#1E2923',
-                   backgroundGradientTo: '#08130D',
-                   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
-                 }}
-                 accessor="amount"
-                 backgroundColor="transparent"
-               />
+              <Text>Percentage Breakdown</Text>
+                <PieChart
+                    data={data}
+                    width={screenWidth}
+                    height={200}
+                    chartConfig={{
+                      backgroundGradientFrom: '#1E2923',
+                      backgroundGradientTo: '#08130D',
+                      color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
+                    }}
+                    accessor="amount"
+                    backgroundColor="transparent"
+                  />
                <Text>Swipe for chart</Text>
              </View>
+             <IncomeTable data={incomeData}/>
              </ScrollView>
           
           : null}
