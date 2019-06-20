@@ -4,7 +4,6 @@ import Title from './components/Title';
 import InputForm from './components/InputForm'
 import { PieChart } from 'react-native-chart-kit'
 import colors from './colors.js'
-
 const colorChooser = colors
 const screenWidth = Dimensions.get('window').width
 // import console= require('console');
@@ -14,6 +13,12 @@ const data =[
   // { name: 'Clothes', amount: 150, color: '#ffe6e6', legendFontColor: 'red', legendFontSize: 10},
   // { name: 'Work', amount: 1000, color: '#33cc33', legendFontColor: 'green', legendFontSize: 10}
 ]
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+today = yyyy + '-' + mm + '-' + dd
+
 
 export default class App extends React.Component {
   state = {
@@ -22,7 +27,7 @@ export default class App extends React.Component {
         category: '',
         description: '',
         color: '',
-        chosenDate: new Date()
+        chosenDate: today
       }
   
   _getUserInput = () => {
@@ -79,7 +84,6 @@ export default class App extends React.Component {
   }
   _setDate = (newDate) => {
     console.log(newDate)
-    console.log(this.state.chosenDate)
     this.setState({chosenDate: newDate});
     
   }
@@ -90,7 +94,7 @@ export default class App extends React.Component {
       <View>
         <View style={styles.container}>
           <Title/>
-          <InputForm formHandler={this._getUserInput} descriptionHandler={this._getUserText} typeHandler={this._getType} amountHandler={this._getUserAmount} dateHandler={this._setDate} description={this.state.description} type={this.state.type} amount={this.state.amount} date={this.state.chosenDate} width={screenWidth}/>
+          <InputForm formHandler={this._getUserInput} descriptionHandler={this._getUserText} typeHandler={this._getType} amountHandler={this._getUserAmount} dateHandler={this._setDate} description={this.state.description} type={this.state.type} amount={this.state.amount} date={this.state.chosenDate} />
         </View>
         <View style={styles.chart}>
           <PieChart

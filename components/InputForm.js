@@ -1,10 +1,13 @@
 import React from 'react';
 import {View, Button, Text, TextInput, Picker, DatePickerIOS, StyleSheet, Dimensions} from 'react-native';
+import DatePicker from 'react-native-datepicker'
+
 const screenWidth = Dimensions.get('window').width
 
 const inputForm = props => {
     return (
         <View style={styles.container}>
+
             {/* <DatePickerIOS
                 style={styles.datePicker}
                 date={props.date}
@@ -18,7 +21,6 @@ const inputForm = props => {
                 <Picker.Item label="Income" value="income" />
                 <Picker.Item label="Expense" value="expense" />
             </Picker>
-
             <TextInput 
             editable ={true}
             style={styles.form1}
@@ -32,7 +34,16 @@ const inputForm = props => {
             placeholder="Add Amount"
             onChangeText={props.amountHandler}
             value={props.amount.toString()}/>
-
+            <DatePicker
+            style={styles.datePicker}
+            date={props.date}
+            mode="date"
+            placeholder="select date"
+            format="YYYY-MM-DD"
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            onDateChange={props.dateHandler}
+            />
             <Button
             style={{height: 25}}
             title="Submit" onPress={props.formHandler} />
@@ -41,29 +52,34 @@ const inputForm = props => {
 }
 const styles = StyleSheet.create({
     container: {
-        // borderColor: 'black',
-        borderWidth: 1,
-        width: screenWidth,
-        height: 500
+        // borderWidth: 1,
+        width: screenWidth/2,
+        height: 350
       // justifyContent: 'center',
     },
     form1: {
-        height: 23, 
-        width: 150,
+        height: 40, 
+        marginTop: 4,
         borderColor: 'gray',
         borderWidth: 1,
     },
     form2: {
         marginTop: 5,
-        height: 20, 
+        height: 40, 
         borderColor: 'gray',
-        borderWidth: 1
+        borderWidth: 1,
+        marginBottom: 10
     },
     datePicker: {
-        width: screenWidth
+        // marginTop: 10,
+        width: screenWidth/2,
+        // borderWidth: 1
     },
     picker: {
-        // marginTop: -10,
+        // borderWidth: 1,
+        height: 150,
+        marginTop: -20,
+        // marginBottom: 5,
         justifyContent: 'center'
     }
 });
