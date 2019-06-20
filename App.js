@@ -21,32 +21,38 @@ export default class App extends React.Component {
         amount: '',
         category: '',
         description: '',
-        color: ''
+        color: '',
+        chosenDate: new Date()
       }
   
   _getUserInput = () => {
+    console.log(parseInt(this.state.amount));
+    if(isNaN(parseInt(this.state.amount)) || this.state.description=== '' ){
+      console.log('No description or not a number')
+    } else {
     if (this.state.type === 'income') {
       let randColor = colorChooser.greens[Math.floor(Math.random()*7)];
       data.push({
-        name: this.state.description,
-        amount: this.state.amount,
+        name: this.state.description+' +'+parseInt(this.state.amount),
+        amount: parseInt(this.state.amount),
         color: randColor,   
         legendFontColor: 'green',
         legendFontSize: 10
       });
-    } else if (this.state.type==='expense') {
+    } else if (this.state.type ==='expense') {
       let randColor = colorChooser.reds[Math.floor(Math.random()*7)];
       data.push({
-        name: this.state.description,
-        amount: this.state.amount,
+        name: this.state.description+ ' -'+parseInt(this.state.amount),
+        amount: parseInt(this.state.amount),
         color: randColor,   
-        legendFontColor: 'green',
+        legendFontColor: 'red',
         legendFontSize: 10
       });
     }
+  }
     // Resets input fields
     this.setState({
-      type: '',
+      type: 'income',
       amount: '',
       category: '',
       description: ''
@@ -60,9 +66,8 @@ export default class App extends React.Component {
   }
   _getUserAmount = (text) => {
     console.log(text);
-    const amount = parseInt(text) 
     this.setState({
-        amount
+        amount: text
     })
     console.log(this.state.amount)
   }
@@ -72,13 +77,20 @@ export default class App extends React.Component {
         type: value
     })
   }
+  _setDate = (newDate) => {
+    console.log(newDate)
+    console.log(this.state.chosenDate)
+    this.setState({chosenDate: newDate});
+    
+  }
+
 
   render () {
     return (
       <View>
         <View style={styles.container}>
           <Title/>
-          <InputForm formHandler={this._getUserInput} descriptionHandler={this._getUserText} typeHandler={this._getType} amountHandler={this._getUserAmount} description={this.state.description} type={this.state.type} amount={this.state.amount} />
+          <InputForm formHandler={this._getUserInput} descriptionHandler={this._getUserText} typeHandler={this._getType} amountHandler={this._getUserAmount} dateHandler={this._setDate} description={this.state.description} type={this.state.type} amount={this.state.amount} date={this.state.chosenDate} width={screenWidth}/>
         </View>
         <View style={styles.chart}>
           <PieChart
