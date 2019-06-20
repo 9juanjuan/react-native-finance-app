@@ -4,6 +4,7 @@ import DatePicker from 'react-native-datepicker'
 
 const screenWidth = Dimensions.get('window').width
 
+
 const inputForm = props => {
     return (
         <View style={styles.container}>

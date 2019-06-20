@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions} from 'react-native';
+import { StyleSheet, Text, View, Dimensions, ScrollView} from 'react-native';
 import Title from './components/Title';
 import InputForm from './components/InputForm'
 import { PieChart } from 'react-native-chart-kit'
@@ -27,7 +27,8 @@ export default class App extends React.Component {
         category: '',
         description: '',
         color: '',
-        chosenDate: today
+        chosenDate: today,
+        submitted: false
       }
   
   _getUserInput = () => {
@@ -42,7 +43,8 @@ export default class App extends React.Component {
         amount: parseInt(this.state.amount),
         color: randColor,   
         legendFontColor: 'green',
-        legendFontSize: 10
+        legendFontSize: 10,
+        date: this.state.chosenDate
       });
     } else if (this.state.type ==='expense') {
       let randColor = colorChooser.reds[Math.floor(Math.random()*7)];
@@ -51,7 +53,8 @@ export default class App extends React.Component {
         amount: parseInt(this.state.amount),
         color: randColor,   
         legendFontColor: 'red',
-        legendFontSize: 10
+        legendFontSize: 10,
+        date: this.state.chosenDate
       });
     }
   }
@@ -60,7 +63,8 @@ export default class App extends React.Component {
       type: 'income',
       amount: '',
       category: '',
-      description: ''
+      description: '',
+      submitted: true
     })
   }
   _getUserText = (text) => {
@@ -91,25 +95,35 @@ export default class App extends React.Component {
 
   render () {
     return (
-      <View>
+      // <View>
         <View style={styles.container}>
           <Title/>
           <InputForm formHandler={this._getUserInput} descriptionHandler={this._getUserText} typeHandler={this._getType} amountHandler={this._getUserAmount} dateHandler={this._setDate} description={this.state.description} type={this.state.type} amount={this.state.amount} date={this.state.chosenDate} />
-        </View>
-        <View style={styles.chart}>
-          <PieChart
-              data={data}
-              width={screenWidth}
-              height={220}
-              chartConfig={{
-                backgroundGradientFrom: '#1E2923',
-                backgroundGradientTo: '#08130D',
-                color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
-              }}
-              accessor="amount"
-              backgroundColor="transparent"
-            />
-          </View>
+        {/* </View> */}
+        { this.state.submitted ?
+             <ScrollView
+             style={{borderWidth: 1, height: 300}}
+             horizontal={true}>
+           <View style={styles.chart}>
+             <Text>Percentage Breakdown</Text>
+             <PieChart
+                 data={data}
+                 width={screenWidth}
+                 height={200}
+                 chartConfig={{
+                   backgroundGradientFrom: '#1E2923',
+                   backgroundGradientTo: '#08130D',
+                   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
+                 }}
+                 accessor="amount"
+                 backgroundColor="transparent"
+               />
+               <Text>Swipe for chart</Text>
+             </View>
+             </ScrollView>
+          
+          : null}
+       
       </View>
     );
   }
@@ -124,9 +138,8 @@ export default class App extends React.Component {
       // justifyContent: 'center',
     },
     chart: {
-      flex: 1,
-      marginTop: 400,
-      marginLeft: 30,
+      // marginTop: 400,
+      // marginLeft: 20,
       justifyContent: 'flex-start',
       alignContent: 'center',
       alignItems: 'center'
