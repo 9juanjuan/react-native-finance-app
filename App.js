@@ -53,10 +53,10 @@ export default class App extends React.Component {
         type: this.state.type,
         id: uuid()
       });
+      
       data.map((entry)=> {
         console.log(entry.type)
-        if (entry.type === 'income' && entry.id in data === false
-        ) {
+        if (entry.type === 'income' && entry.id in data === false) {
           incomeData.push([entry.date, this.state.description, entry.amount])
         }
       })
