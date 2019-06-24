@@ -1,3 +1,3 @@
 # react-native-finance-app
 
-![] (images/example1.gif)
+![](example1.gif)
