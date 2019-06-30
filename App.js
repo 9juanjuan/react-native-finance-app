@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Dimensions, ScrollView} from 'react-native';
 import Title from './components/Title';
 import InputForm from './components/InputForm';
+import ExpenseTable from './components/ExpenseTable'
 import IncomeTable from './components/IncomeTable';
 import { PieChart } from 'react-native-chart-kit';
 import colors from './colors.js';
@@ -54,12 +55,12 @@ export default class App extends React.Component {
         id: uuid()
       });
       
-      data.map((entry)=> {
-        console.log(entry.type)
-        if (entry.type === 'income' && entry.id in data === false) {
-          incomeData.push([entry.date, this.state.description, entry.amount])
-        }
-      })
+      // data.map((entry)=> {
+      //   console.log(entry.type)
+      //   if (entry.type === 'income' && entry.id in data === false) {
+          incomeData.push([this.state.chosenDate, this.state.description, this.state.amount])
+      //   }
+      // })
       console.log(incomeData);
 
     } else if (this.state.type ==='expense') {
@@ -74,11 +75,12 @@ export default class App extends React.Component {
         type: this.state.type,
         id: uuid()
       });
-      data.map((entry)=> {
-        if (entry.type === 'expense' ) {
-          expenseData.push([entry.date, this.state.description, entry.amount])
-        }
-      })
+      // data.map((entry)=> {
+      //   if (entry.type === 'expense' ) {
+      //     expenseData.push([entry.date, this.state.description, entry.amount])
+      //   }
+      // })
+      expenseData.push([this.state.chosenDate, this.state.description, this.state.amount])
     }
   }
 
@@ -146,6 +148,7 @@ export default class App extends React.Component {
                <Text>Swipe for chart</Text>
              </View>
              <IncomeTable data={incomeData}/>
+             <ExpenseTable data={expenseData}/>
              </ScrollView>
           
           : null}
