@@ -2,4 +2,4 @@
 
 Documenting work in progress 
 
-![](images/example1.gif)
+![](example1.gif)
