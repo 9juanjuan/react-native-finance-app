@@ -4,19 +4,31 @@ import Title from './components/Title';
 import InputForm from './components/InputForm';
 import ExpenseTable from './components/ExpenseTable'
 import IncomeTable from './components/IncomeTable';
-import { PieChart } from 'react-native-chart-kit';
+import { PieChart, LineChart } from 'react-native-chart-kit';
 import colors from './colors.js';
 const uuid = require('uuidv4');
 const colorChooser = colors
 const screenWidth = Dimensions.get('window').width
 
 // import console= require('console');
+const chartConfig = {
+  backgroundGradientFrom: '#1E2923',
+  backgroundGradientTo: '#08130D',
+  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+  strokeWidth: 2 // optional, default 3
+}
 const data =[ 
   // { name: 'Food', amount: 200, color: 'red', legendFontColor: 'red', legendFontSize: 10},
   // { name: 'Movies', amount: 50, color: '#ff6666', legendFontColor: 'red', legendFontSize: 10},
   // { name: 'Clothes', amount: 150, color: '#ffe6e6', legendFontColor: 'red', legendFontSize: 10},
   // { name: 'Work', amount: 1000, color: '#33cc33', legendFontColor: 'green', legendFontSize: 10}
 ]
+const lineData= {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+  datasets: [{
+    data: [ 20, 45, 28, 80, 99, 43 ]
+  }]
+}
 var incomeData = [];
 var expenseData = [];
 var today = new Date();
@@ -130,7 +142,8 @@ export default class App extends React.Component {
         { this.state.submitted ?
              <ScrollView
              style={{borderWidth: 1, height: 300}}
-             horizontal={true}>
+             horizontal={true}
+             >
            <View style={styles.chart}>
               <Text>Percentage Breakdown</Text>
                 <PieChart
@@ -149,6 +162,13 @@ export default class App extends React.Component {
              </View>
              <IncomeTable data={incomeData}/>
              <ExpenseTable data={expenseData}/>
+             <LineChart 
+                data ={lineData}
+                height={200}
+                width={screenWidth}
+                chartConfig={chartConfig}
+
+              />
              </ScrollView>
           
           : null}
