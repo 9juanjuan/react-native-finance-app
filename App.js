@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, ScrollView} from 'react-native';
+import { createSwitchNavigator, createAppContainer} from 'react-navigation'
 import Title from './components/Title';
 import InputForm from './components/InputForm';
 import ExpenseTable from './components/ExpenseTable'
@@ -15,7 +16,7 @@ const chartConfig = {
   backgroundGradientFrom: '#1E2923',
   backgroundGradientTo: '#08130D',
   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  strokeWidth: 2 // optional, default 3
+  strokeWidth: 1 // optional, default 3
 }
 const data =[ 
   // { name: 'Food', amount: 200, color: 'red', legendFontColor: 'red', legendFontSize: 10},
@@ -134,7 +135,9 @@ export default class App extends React.Component {
 
   render () {
     return (
-      // <View>
+      //  AppContainer will contain the app eventually but need to figure out how to wrap existing app components
+    
+      // <AppContainer/>
         <View style={styles.container}>
           <Title/>
           <InputForm formHandler={this._getUserInput} descriptionHandler={this._getUserText} typeHandler={this._getType} amountHandler={this._getUserAmount} dateHandler={this._setDate} description={this.state.description} type={this.state.type} amount={this.state.amount} date={this.state.chosenDate} />
@@ -178,20 +181,46 @@ export default class App extends React.Component {
   }
 }
 
+class DashboardScreen extends Component {
+  render () {
+    return (
+      <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
+        <Text> DashboardScreen</Text>
+      </View>
+    )
+  }
+}
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      // justifyContent: 'center',
-    },
-    chart: {
-      // marginTop: 400,
-      // marginLeft: 20,
-      justifyContent: 'flex-start',
-      alignContent: 'center',
-      alignItems: 'center'
-    }
+class SpreadsheetScreen extends Component {
+  render () {
+    return (
+      <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
+        <Text> SpreadSheetScreen</Text>
+      </View>
+    )
+  }
+}
 
-  });
+const AppSwitchNavigator = createSwitchNavigator({
+    Dashboard: {screen: DashboardScreen},
+    Spreadsheet: {screen: SpreadsheetScreen} 
+})
+
+const AppContainer = createAppContainer(AppSwitchNavigator);
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  chart: {
+    // marginTop: 400,
+    // marginLeft: 20,
+    justifyContent: 'flex-start',
+    alignContent: 'center',
+    alignItems: 'center'
+  }
+
+});
