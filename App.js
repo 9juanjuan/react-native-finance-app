@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, ScrollView, Button} from 'react-native';
+import Icon from '@expo/vector-icons/Ionicons';
 import { createSwitchNavigator, createAppContainer, createDrawerNavigator, createBottomTabNavigator, createStackNavigator} from 'react-navigation'
 import Title from './components/Title';
 import InputForm from './components/InputForm';
@@ -188,31 +189,32 @@ return (
   )};
 }
 
-class SpreadsheetScreen extends React.Component {
-  render () {
-    return (
-      <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
-         <PieChart
-                data={data}
-                width={screenWidth}
-                height={200}
-                chartConfig={{
-                  backgroundGradientFrom: '#1E2923',
-                  backgroundGradientTo: '#08130D',
-                  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
-                }}
-                accessor="amount"
-                backgroundColor="transparent"
-              />
-      </View>
-    )
-  }
-}
+// class SpreadsheetScreen extends React.Component {
+//   render () {
+//     return (
+//       <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
+//          <PieChart
+//                 data={data}
+//                 width={screenWidth}
+//                 height={200}
+//                 chartConfig={{
+//                   backgroundGradientFrom: '#1E2923',
+//                   backgroundGradientTo: '#08130D',
+//                   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
+//                 }}
+//                 accessor="amount"
+//                 backgroundColor="transparent"
+//               />
+//       </View>
+//     )
+//   }
+// }
 
 class PChart extends React.Component {
   render () {
     return (
       <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
+        <Text> PieChart view </Text>
          <PieChart
                 data={data}
                 width={screenWidth}
@@ -230,7 +232,7 @@ class PChart extends React.Component {
   }
 }
 
-class Chart extends React.Component {
+class Tables extends React.Component {
   render () {
     return (
       <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
@@ -254,16 +256,40 @@ class LChart extends React.Component {
 
 const DataTabNavigator = createBottomTabNavigator({
   PChart, 
-  Chart,
+  Tables,
   LChart
+}, {
+  navigationOptions:({navigation})=> {
+    const {routeName} = navigation.state.routes[navigation.state.index];
+    return {
+      headerTitle: routeName
+    }
+  }
 })
+const DataStackNavigator = createStackNavigator({
+  DataTabNavigator: DataTabNavigator,
+}, {defaultNavigationOptions:({navigation})=> {
+  return {
+    headerLeft:(
+      <Icon style={{paddingLeft: 10}} onPress={()=>navigation.openDrawer()} name="md-menu" size={30} /> 
+    )
+  }
+}});
 
+const DashboardStackNavigator = createStackNavigator({
+  DashboardScreen: DashboardScreen,
+}, {defaultNavigationOptions:({navigation})=> {
+  return {
+    headerLeft:(
+<Icon style={{paddingLeft: 10}} onPress={()=>navigation.openDrawer()} name="md-menu" size={30} />     )
+  }
+}});
 const AppDrawerNavigator = createDrawerNavigator({
   Dashboard: {
-    screen: DashboardScreen
+    screen: DashboardStackNavigator
   },
   Spreadsheet: {
-    screen: DataTabNavigator
+    screen: DataStackNavigator
   }
 });
 const AppSwitchNavigator = createSwitchNavigator({
