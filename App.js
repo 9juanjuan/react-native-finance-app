@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, ScrollView} from 'react-native';
-import { createSwitchNavigator, createAppContainer} from 'react-navigation'
+import { StyleSheet, Text, View, Dimensions, ScrollView, Button} from 'react-native';
+import { createSwitchNavigator, createAppContainer, createDrawerNavigator, createBottomTabNavigator, createStackNavigator} from 'react-navigation'
 import Title from './components/Title';
 import InputForm from './components/InputForm';
 import ExpenseTable from './components/ExpenseTable'
@@ -45,7 +45,7 @@ export default class App extends React.Component {
   }
 }
 
-class DashboardScreen extends Component {
+class DashboardScreen extends React.Component {
   state = {
     type: 'income',
     amount: '',
@@ -147,15 +147,17 @@ return (
     <View style={styles.container}>
       <Title/>
       <InputForm formHandler={this._getUserInput} descriptionHandler={this._getUserText} typeHandler={this._getType} amountHandler={this._getUserAmount} dateHandler={this._setDate} description={this.state.description} type={this.state.type} amount={this.state.amount} date={this.state.chosenDate} />
+      <Button title="View Financial Data" onPress={() =>
+      this.props.navigation.navigate('Spreadsheet')} />
     {/* </View> */}
-    { this.state.submitted ?
+    {/* { this.state.submitted ?
          <ScrollView
          style={{borderWidth: 1, height: 300}}
          horizontal={true}
          >
        <View style={styles.chart}>
           <Text>Percentage Breakdown</Text>
-            <PieChart
+             <PieChart
                 data={data}
                 width={screenWidth}
                 height={200}
@@ -180,25 +182,93 @@ return (
           />
          </ScrollView>
       
-      : null}
+      : null} */}
    
   </View>
   )};
 }
 
-class SpreadsheetScreen extends Component {
+class SpreadsheetScreen extends React.Component {
   render () {
     return (
       <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text> SpreadSheetScreen</Text>
+         <PieChart
+                data={data}
+                width={screenWidth}
+                height={200}
+                chartConfig={{
+                  backgroundGradientFrom: '#1E2923',
+                  backgroundGradientTo: '#08130D',
+                  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
+                }}
+                accessor="amount"
+                backgroundColor="transparent"
+              />
       </View>
     )
   }
 }
 
+class PChart extends React.Component {
+  render () {
+    return (
+      <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
+         <PieChart
+                data={data}
+                width={screenWidth}
+                height={200}
+                chartConfig={{
+                  backgroundGradientFrom: '#1E2923',
+                  backgroundGradientTo: '#08130D',
+                  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
+                }}
+                accessor="amount"
+                backgroundColor="transparent"
+          />
+      </View>
+    )
+  }
+}
+
+class Chart extends React.Component {
+  render () {
+    return (
+      <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
+        <IncomeTable data={incomeData}/>
+        <ExpenseTable data={expenseData}/>
+      </View> 
+    )
+  }
+}
+
+class LChart extends React.Component {
+  render () {
+    return (
+      <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
+        <LineChart data ={lineData} height={200} width={screenWidth} chartConfig={chartConfig}
+        />     
+       </View> 
+    )
+  }
+}
+
+const DataTabNavigator = createBottomTabNavigator({
+  PChart, 
+  Chart,
+  LChart
+})
+
+const AppDrawerNavigator = createDrawerNavigator({
+  Dashboard: {
+    screen: DashboardScreen
+  },
+  Spreadsheet: {
+    screen: DataTabNavigator
+  }
+});
 const AppSwitchNavigator = createSwitchNavigator({
-    Dashboard: {screen: DashboardScreen},
-    Spreadsheet: {screen: SpreadsheetScreen} 
+    InputData: {screen: DashboardScreen},
+    Spreadsheet: {screen: AppDrawerNavigator} 
 })
 
 const AppContainer = createAppContainer(AppSwitchNavigator);
