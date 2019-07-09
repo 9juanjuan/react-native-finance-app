@@ -285,16 +285,15 @@ const DashboardStackNavigator = createStackNavigator({
   }
 }});
 const AppDrawerNavigator = createDrawerNavigator({
-  Dashboard: {
+  'Data Input': {
     screen: DashboardStackNavigator
   },
-  Spreadsheet: {
+  'Financial Data': {
     screen: DataStackNavigator
   }
 });
 const AppSwitchNavigator = createSwitchNavigator({
-    InputData: {screen: DashboardScreen},
-    Spreadsheet: {screen: AppDrawerNavigator} 
+    DashboardScreen: {screen: AppDrawerNavigator} 
 })
 
 const AppContainer = createAppContainer(AppSwitchNavigator);
