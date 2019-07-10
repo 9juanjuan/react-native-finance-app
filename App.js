@@ -19,7 +19,7 @@ const chartConfig = {
   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
   strokeWidth: 1 // optional, default 3
 }
-const data =[ 
+var data =[ 
   // { name: 'Food', amount: 200, color: 'red', legendFontColor: 'red', legendFontSize: 10},
   // { name: 'Movies', amount: 50, color: '#ff6666', legendFontColor: 'red', legendFontSize: 10},
   // { name: 'Clothes', amount: 150, color: '#ffe6e6', legendFontColor: 'red', legendFontSize: 10},
@@ -58,11 +58,12 @@ class DashboardScreen extends React.Component {
   }
 
 _getUserInput = () => {
-console.log(parseInt(this.state.amount));
+  console.log(data)
 if(isNaN(parseInt(this.state.amount)) || this.state.description=== '' ){
   console.log('No description or not a number')
 } else {
 if (this.state.type === 'income') {
+  console.log('Income amount is : '+this.state.amount)
   let randColor = colorChooser.greens[Math.floor(Math.random()*7)];
   data.push({
     name: this.state.description+' +'+parseInt(this.state.amount),
@@ -74,6 +75,7 @@ if (this.state.type === 'income') {
     type: this.state.type,
     id: uuid()
   });
+  [...data]
   
   // data.map((entry)=> {
   //   console.log(entry.type)
@@ -84,6 +86,7 @@ if (this.state.type === 'income') {
   console.log(incomeData);
 
 } else if (this.state.type ==='expense') {
+  console.log('The expense is : '+this.state.amount)
   let randColor = colorChooser.reds[Math.floor(Math.random()*7)];
   data.push({
     name: this.state.description+ ' -'+parseInt(this.state.amount),
@@ -101,13 +104,14 @@ if (this.state.type === 'income') {
   //   }
   // })
   expenseData.push([this.state.chosenDate, this.state.description, this.state.amount])
+  console.log(expenseData)
 }
 }
 
 
 // Resets input fields
 this.setState({
-  type: 'income',
+  // type: 'income',
   amount: '',
   category: '',
   description: '',
@@ -149,7 +153,7 @@ return (
       <Title/>
       <InputForm formHandler={this._getUserInput} descriptionHandler={this._getUserText} typeHandler={this._getType} amountHandler={this._getUserAmount} dateHandler={this._setDate} description={this.state.description} type={this.state.type} amount={this.state.amount} date={this.state.chosenDate} />
       <Button title="View Financial Data" onPress={() =>
-      this.props.navigation.navigate('Spreadsheet')} />
+      this.props.navigation.navigate('Financial Data')} />
     {/* </View> */}
     {/* { this.state.submitted ?
          <ScrollView
@@ -210,12 +214,12 @@ return (
 //   }
 // }
 
-class PChart extends React.Component {
+class PieChartView extends React.Component {
   render () {
     return (
       <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
         <Text> PieChart view </Text>
-         <PieChart
+        <PieChart
                 data={data}
                 width={screenWidth}
                 height={200}
@@ -226,13 +230,14 @@ class PChart extends React.Component {
                 }}
                 accessor="amount"
                 backgroundColor="transparent"
-          />
+          />  
+         
       </View>
     )
   }
 }
 
-class Tables extends React.Component {
+class SpreadSheetView extends React.Component {
   render () {
     return (
       <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
@@ -243,7 +248,7 @@ class Tables extends React.Component {
   }
 }
 
-class LChart extends React.Component {
+class LineChartView extends React.Component {
   render () {
     return (
       <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
@@ -255,9 +260,9 @@ class LChart extends React.Component {
 }
 
 const DataTabNavigator = createBottomTabNavigator({
-  PChart, 
-  Tables,
-  LChart
+  PieChartView, 
+  SpreadSheetView,
+  LineChartView
 }, {
   navigationOptions:({navigation})=> {
     const {routeName} = navigation.state.routes[navigation.state.index];
