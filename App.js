@@ -47,15 +47,17 @@ export default class App extends React.Component {
 }
 
 class DashboardScreen extends React.Component {
-  state = {
+  constructor(props) {
+  super(props);
+  this.state = {
     type: 'income',
     amount: '',
     category: '',
     description: '',
     color: '',
-    chosenDate: today,
-    submitted: false
+    chosenDate: today
   }
+}
 
 _getUserInput = () => {
   console.log(data)
@@ -108,15 +110,15 @@ if (this.state.type === 'income') {
 }
 }
 
-
-// Resets input fields
-this.setState({
+setTimeout(() => {
+  this.setState({
   // type: 'income',
   amount: '',
   category: '',
-  description: '',
-  submitted: true
-})
+  description: ''
+})}, 500 )
+// Resets input fields
+
 }
 _getUserText = (text) => {
 console.log(text);
@@ -146,81 +148,41 @@ this.setState({chosenDate: newDate});
 
 render () {
 return (
-  //  AppContainer will contain the app eventually but need to figure out how to wrap existing app components
-
-  // <AppContainer/>
     <View style={styles.container}>
       <Title/>
       <InputForm formHandler={this._getUserInput} descriptionHandler={this._getUserText} typeHandler={this._getType} amountHandler={this._getUserAmount} dateHandler={this._setDate} description={this.state.description} type={this.state.type} amount={this.state.amount} date={this.state.chosenDate} />
       <Button title="View Financial Data" onPress={() =>
       this.props.navigation.navigate('Financial Data')} />
-    {/* </View> */}
-    {/* { this.state.submitted ?
-         <ScrollView
-         style={{borderWidth: 1, height: 300}}
-         horizontal={true}
-         >
-       <View style={styles.chart}>
-          <Text>Percentage Breakdown</Text>
-             <PieChart
-                data={data}
-                width={screenWidth}
-                height={200}
-                chartConfig={{
-                  backgroundGradientFrom: '#1E2923',
-                  backgroundGradientTo: '#08130D',
-                  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
-                }}
-                accessor="amount"
-                backgroundColor="transparent"
-              />
-           <Text>Swipe for chart</Text>
-         </View>
-         <IncomeTable data={incomeData}/>
-         <ExpenseTable data={expenseData}/>
-         <LineChart 
-            data ={lineData}
-            height={200}
-            width={screenWidth}
-            chartConfig={chartConfig}
-
-          />
-         </ScrollView>
-      
-      : null} */}
-   
   </View>
   )};
 }
 
-// class SpreadsheetScreen extends React.Component {
-//   render () {
-//     return (
-//       <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
-//          <PieChart
-//                 data={data}
-//                 width={screenWidth}
-//                 height={200}
-//                 chartConfig={{
-//                   backgroundGradientFrom: '#1E2923',
-//                   backgroundGradientTo: '#08130D',
-//                   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
-//                 }}
-//                 accessor="amount"
-//                 backgroundColor="transparent"
-//               />
-//       </View>
-//     )
-//   }
-// }
 
 class PieChartView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    newData: []
+  }
+}
+  componentDidMount () {
+    setInterval(()=> {
+      // A big no no, will work on alternate solution that doesn't involve this
+      this.forceUpdate()
+    },2000)
+    console.log('oldstate is: '+this.state.newData)
+    this.setState({ 
+      newData: data
+    })
+    console.log('newstate is: '+this.state.newData)
+  }
+
   render () {
     return (
       <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
         <Text> PieChart view </Text>
-        <PieChart
-                data={data}
+        { data.length > 0 ? <PieChart
+                data={this.state.newData}
                 width={screenWidth}
                 height={200}
                 chartConfig={{
@@ -230,7 +192,8 @@ class PieChartView extends React.Component {
                 }}
                 accessor="amount"
                 backgroundColor="transparent"
-          />  
+          /> : <Text> No Data to show</Text>}
+         
          
       </View>
     )
@@ -238,6 +201,8 @@ class PieChartView extends React.Component {
 }
 
 class SpreadSheetView extends React.Component {
+  incomeData; 
+  expenseData;
   render () {
     return (
       <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
@@ -298,7 +263,7 @@ const AppDrawerNavigator = createDrawerNavigator({
   }
 });
 const AppSwitchNavigator = createSwitchNavigator({
-    DashboardScreen: {screen: AppDrawerNavigator} 
+    MainScren: {screen: AppDrawerNavigator} 
 })
 
 const AppContainer = createAppContainer(AppSwitchNavigator);
