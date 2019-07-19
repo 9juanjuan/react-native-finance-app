@@ -107,7 +107,7 @@ if (this.state.type === 'income') {
   // })
   expenseData.push([this.state.chosenDate, this.state.description, this.state.amount])
   console.log(expenseData)
-}
+  }
 }
 
 setTimeout(() => {
@@ -165,16 +165,37 @@ class PieChartView extends React.Component {
     newData: []
   }
 }
-  componentDidMount () {
-    setInterval(()=> {
-      // A big no no, will work on alternate solution that doesn't involve this
-      this.forceUpdate()
-    },2000)
-    console.log('oldstate is: '+this.state.newData)
+
+componentDidUpdate(prevProps, prevState) {
+  // only update chart if the data has changed
+  console.log('*********pie chart state***********')
+
+  console.log(this.state.newData)
+  console.log('*********pie chart state***********')
+
+  if (prevState.newData !== data) {
+    // this.chart = c3.load({
+    //   data: this.props.data
+    // });
+    console.log('*********pie chart state***********')
+    console.log(this.state.newData)
+    console.log('*********pie chart state***********')
+
     this.setState({ 
       newData: data
     })
-    console.log('newstate is: '+this.state.newData)
+  }
+}
+  componentDidMount () {
+    // setInterval(()=> {
+    //   // A big no no, will work on alternate solution that doesn't involve this
+    //   this.forceUpdate()
+    // },2000)
+    // console.log('oldstate is: '+this.state.newData)
+    this.setState({ 
+      newData: data
+    })
+    // console.log('newstate is: '+this.state.newData)
   }
 
   render () {
@@ -201,8 +222,6 @@ class PieChartView extends React.Component {
 }
 
 class SpreadSheetView extends React.Component {
-  incomeData; 
-  expenseData;
   render () {
     return (
       <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
