@@ -180,7 +180,6 @@ componentDidUpdate(prevProps, prevState) {
     console.log('*********pie chart state***********')
     console.log(this.state.newData)
     console.log('*********pie chart state***********')
-
     this.setState({ 
       newData: data
     })
@@ -203,7 +202,7 @@ componentDidUpdate(prevProps, prevState) {
       <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
         <Text> PieChart view </Text>
         { data.length > 0 ? <PieChart
-                data={this.state.newData}
+                data={data}
                 width={screenWidth}
                 height={200}
                 chartConfig={{
